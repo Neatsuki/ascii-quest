@@ -1,0 +1,8 @@
+rpg
+build/
+__pycache__/
+*.pyc
+*.o
+*.sav
+*.swp
+.DS_Store
