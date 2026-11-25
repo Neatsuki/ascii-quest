@@ -105,7 +105,8 @@ static const EnemyType FLOOR_POOL[FLOORS][4] = {
     { E_CULTIST, E_IMP,   E_GOLEM,  E_CULTIST },
     { E_WRAITH, E_CULTIST, E_GHOUL, E_WRAITH },
     { E_CULTIST, E_WYRM,  E_WRAITH, E_GOLEM  },
-    { E_GOLEM,  E_WRAITH, E_WYRM,   E_GOLEM  }
+    { E_GOLEM,  E_WRAITH, E_WYRM,   E_GOLEM  },
+    { E_WYRM,   E_GOLEM,  E_CULTIST, E_WYRM  }
 };
 
 void generate_floor(Game *g, int floor_index) {
@@ -165,8 +166,9 @@ void generate_floor(Game *g, int floor_index) {
     }
 
     /* Boss first, then stairs on another free tile in the same room. */
-    if (floor_index == FLOORS - 1) {
-        place_enemy(g, E_DRAGON, room_cx(last), room_cy(last));
+    if (floor_index >= FLOORS - 2) {
+        place_enemy(g, floor_index == FLOORS - 1 ? E_KING : E_DRAGON,
+                    room_cx(last), room_cy(last));
         for (int tries = 0; tries < 40; tries++) {
             int tx = last->x + rand_range(last->w);
             int ty = last->y + rand_range(last->h);

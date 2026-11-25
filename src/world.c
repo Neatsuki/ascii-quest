@@ -198,6 +198,7 @@ void load_floor(Game *g, int floor_index) {
             case 'L':
             case 'c':
             case 'W':
+            case 'X':
             case 'D': {
                 EnemyType t = E_SLIME;
                 if (c == 'g') t = E_GOBLIN;
@@ -213,6 +214,7 @@ void load_floor(Game *g, int floor_index) {
                 else if (c == 'c') t = E_CULTIST;
                 else if (c == 'W') t = E_WYRM;
                 else if (c == 'D') t = E_DRAGON;
+                else if (c == 'X') t = E_KING;
                 if (g->enemy_count < MAX_ENEMIES) {
                     Enemy *e = &g->enemies[g->enemy_count++];
                     e->x = x;
@@ -297,6 +299,8 @@ void new_run(Game *g, int floor_index, unsigned int seed, int random_mode) {
     log_add(g, "The gate seals behind you. Only the stairs lead on.");
     log_add(g, "Floor %d: %s.", g->floor + 1, floor_name(g, g->floor));
     if (floor_index == FLOORS - 1)
+        log_add(g, "The King sits his throne, and the crown is burning.");
+    else if (floor_index == FLOORS - 2)
         log_add(g, "The dragon stirs at the far end of the hall.");
     else if (floor_index == 5)
         log_add(g, "A crowned lich guards the way deeper.");
@@ -314,6 +318,8 @@ void descend(Game *g) {
     log_add(g, "You descend the narrow stair. The air grows colder.");
     log_add(g, "Floor %d: %s.", next + 1, floor_name(g, next));
     if (next == FLOORS - 1)
+        log_add(g, "Somewhere ahead, a crown scrapes against stone.");
+    else if (next == FLOORS - 2)
         log_add(g, "Something enormous breathes in the dark.");
     else if (next == 5)
         log_add(g, "A cold crown glitters beyond the gate.");
@@ -390,8 +396,9 @@ void move_enemies(Game *g) {
 
         int dist = iabs(e->x - g->px) + iabs(e->y - g->py);
 
-        /* The dragon guards its gate and never gives chase. */
-        if (e->type == E_DRAGON) continue;
+        /* The dragon guards its gate and never gives chase.
+           The King holds his throne: he waits, but strikes if you come close. */
+        if (e->type == E_DRAGON || e->type == E_KING) continue;
 
         int chase = (dist <= 6 && rand_range(100) < 65);
         int moved = 0;
@@ -467,9 +474,22 @@ void try_move(Game *g, int dx, int dy) {
     }
 
     if (g->map[ny][nx] == T_STAIRS) {
-        if (g->floor >= FLOORS - 1) {
-            log_add(g, "The stair is sealed. The dragon still breathes.");
-            return;
+        if (g->floor >= FLOORS - 2) {
+            int sealed = 0;
+            for (int i = 0; i < g->enemy_count; i++) {
+                const Enemy *e = &g->enemies[i];
+                if (e->alive && (e->type == E_DRAGON || e->type == E_KING)) {
+                    sealed = 1;
+                    break;
+                }
+            }
+            if (sealed) {
+                if (g->floor >= FLOORS - 1)
+                    log_add(g, "The vault door is sealed. The King still rules.");
+                else
+                    log_add(g, "The stair is sealed. The dragon still breathes.");
+                return;
+            }
         }
         descend(g);
         return;

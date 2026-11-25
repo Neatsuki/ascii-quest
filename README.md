@@ -262,3 +262,17 @@ The suite covers:
 MIT. See [LICENSE](LICENSE).
 
 ![ASCII QUEST title screen](screenshots/title.svg)
+
+---
+
+## 这个分支：第 14 层与 ASCII 国王
+
+本分支在原作者版本上做了三件事（详见 `docs/reverse-notes.md` 与 `docs/script-02-ascii-quest.md`）：
+
+1. **加了第 14 层** `The Throne of Ash`（前厅 → 大厅 → 王座厅，柱子做掩体）；
+2. **加了新 Boss** `The ASCII King`：460 HP / ATK 24 / DEF 11，每三回合放一次雷，不能逃跑；
+3. **改了封印规则**：本层还有活着的 Boss 就锁楼梯（原来杀龙即通关，现在杀王才通关）。
+
+另有 `bot/`（自动驾驶机器人）与 `video/`（76.9s 的成片）。
+
+两次通关：原版 Lv15 / 913 金 / 1518 回合；本分支 Lv18 / 1101 金 / 2360 回合。

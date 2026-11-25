@@ -955,13 +955,13 @@ static void render_win(const Game *g) {
         } else if (r == 4) {
             frame_side(&l, "+-------------------------+", C_YELLOW);
         } else if (r == 5) {
-            frame_side(&l, "|      THE DRAGON IS      |", C_YELLOW);
+            frame_side(&l, "|       THE KING IS       |", C_YELLOW);
         } else if (r == 6) {
             frame_side(&l, "|          SLAIN          |", C_YELLOW);
         } else if (r == 7) {
             frame_side(&l, "+-------------------------+", C_YELLOW);
         } else if (r == 9) {
-            frame_side(&l, "The gate opens. Sunlight pours in.", C_WHITE);
+            frame_side(&l, "The crown falls. The vault door opens.", C_WHITE);
         } else if (r == 10) {
             frame_side(&l, "You escape the Crypt of the ASCII King.", C_DIM);
         } else if (r == 12) {

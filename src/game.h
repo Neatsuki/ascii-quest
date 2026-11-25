@@ -24,7 +24,7 @@
 /* ------------------------------------------------------------------------- */
 #define MAP_W        31
 #define MAP_H        15
-#define FLOORS       13
+#define FLOORS       14
 #define SCREEN_W     66
 #define SCREEN_H     23
 #define LOG_LINES    3
@@ -91,6 +91,7 @@ typedef enum {
     E_GOLEM,
     E_LICH,
     E_DRAGON,
+    E_KING,
     E_CULTIST,
     E_WYRM,
     E_COUNT

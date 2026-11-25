@@ -33,10 +33,12 @@ void combat_enemy_turn(Game *g, Enemy *e) {
     const EnemyTrait *tr = enemy_trait(e->type);
     int dmg = 0;
 
-    if (e->type == E_DRAGON && (g->combat_turn % 3) == 0) {
+    if ((e->type == E_DRAGON || e->type == E_KING) && (g->combat_turn % 3) == 0) {
         dmg = 16 + rand_range(5);
         g->hp -= dmg;
-        log_add(g, "The dragon breathes fire! %d damage!", dmg);
+        log_add(g, e->type == E_KING
+                ? "The King's scepter cracks with lightning! %d damage!"
+                : "The dragon breathes fire! %d damage!", dmg);
     } else if (tr->slow > 0 && rand_range(100) < tr->slow) {
         log_add(g, "The %s grinds to a halt.", d->name);
         return;
@@ -100,7 +102,7 @@ void combat_victory(Game *g, Enemy *e) {
     log_add(g, "You defeat the %s! +%d XP, +%d gold.", d->name, d->xp, gold);
     quest_on_kill(g, e->type);
     level_up(g);
-    if (e->type == E_DRAGON) {
+    if (e->type == E_KING) {
         g->mode = MODE_WIN;
         return;
     }
@@ -224,8 +226,10 @@ void combat_flee(Game *g) {
     Enemy *e = &g->enemies[g->combat_enemy];
     const EnemyDef *d = enemy_def(e->type);
 
-    if (e->type == E_DRAGON) {
-        log_add(g, "The dragon fills the gate. There is no escape.");
+    if (e->type == E_DRAGON || e->type == E_KING) {
+        log_add(g, e->type == E_KING
+                    ? "The King's hall has no doors for cowards."
+                    : "The dragon fills the gate. There is no escape.");
         return;
     }
 
